@@ -1,0 +1,25 @@
+version : '3'
+
+services:
+    lb:
+        image: haproxy
+        ports:
+            - "8080:8080"
+        volumes:
+            - ./haproxy:/usr/local/etc/haproxy
+    userservice1:
+        image: userservice
+        environment:
+            - APPID=1111
+    userservice2:
+        image: userservice
+        environment:
+            - APPID=2222
+    userservice3:
+        image: userservice
+        environment:
+            - APPID=3333
+    userservice4:
+        image: userservice
+        environment:
+            - APPID=4444
