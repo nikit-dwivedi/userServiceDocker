@@ -36,6 +36,7 @@ module.exports = {
     getCustomerById: async (req, res) => {
         try {
             const token = parseJwt(req.headers.authorization)
+            
             const { status, message, data } = await customerById(token.userId)
             return status ? success(res, message, data) : badRequest(res, message, data)
         } catch (error) {
@@ -54,7 +55,7 @@ module.exports = {
     },
     getDefaultAvatar: async (req, res) => {
         try {
-            const { status, message, data } = await getAvatar(); 
+            const { status, message, data } = await getAvatar();
             return status ? success(res, message, data) : badRequest(res, message)
         } catch (error) {
             return unknownError(res, error.message)

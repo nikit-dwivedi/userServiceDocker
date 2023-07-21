@@ -74,6 +74,10 @@ const sellerSchema = new Schema({
         enum: ["approved", "pending", "rejected"],
         default: "pending"
     },
+    notificationAlert: {
+        type: Boolean,
+        default: false
+    },
     yeloId: {
         type: Array,
     },

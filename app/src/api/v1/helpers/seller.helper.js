@@ -127,6 +127,22 @@ exports.changeVerifyStatus = async (sellerId, status) => {
     }
 }
 
+exports.changeNotificationAlert = async (sellerId, status) => {
+    try {
+        if (typeof status != "boolean") {
+            return { status: false, message: "Invalid status" }
+        }
+        const sellerData = await sellerModel.findOne({ sellerId })
+        if (!sellerData) {
+            return { status: false, message: "Seller not found" }
+        }
+        await sellerModel.findOneAndUpdate({ sellerId }, { notificationAlert: status })
+        return { status: true, message: "status changed" }
+    } catch (error) {
+        return { status: false, message: "something went wrong", data: error }
+    }
+}
+
 // exports.addNewOutlet = async ()=>{
 //     try {
 

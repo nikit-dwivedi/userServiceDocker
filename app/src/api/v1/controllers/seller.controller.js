@@ -1,6 +1,6 @@
 const { changeUserType } = require("../helpers/auth.helper");
 const { success, badRequest, unknownError } = require("../helpers/response_helper");
-const { addSellerDetails, getAllSeller, sellerBySellerId, changeVerifyStatus, getAllAgentSeller, addYeloId, updateSellerInfo } = require("../helpers/seller.helper");
+const { addSellerDetails, getAllSeller, sellerBySellerId, changeVerifyStatus, getAllAgentSeller, addYeloId, updateSellerInfo, changeNotificationAlert } = require("../helpers/seller.helper");
 const { parseJwt } = require("../middlewares/authToken");
 const { get } = require("../services/axios.service");
 const { agentInfoUrl } = require("../services/url.service");
@@ -36,6 +36,20 @@ exports.editSeller = async (req, res) => {
             sellerId = token.customId
         }
         const { status, message, data } = await updateSellerInfo(sellerId);
+    } catch (error) {
+        return unknownError(res, "unknown error")
+    }
+}
+exports.notificationStatusChange = async (req, res) => {
+    try {
+        const token = parseJwt(req.headers.authorization)
+        let { sellerId } = req.query
+        let { status: notificationStatus } = req.body
+        if (token.role != 3) {
+            sellerId = token.customId
+        }
+        const { status, message } = await changeNotificationAlert(sellerId, notificationStatus);
+        return status ? success(res, message) : badRequest(res, message);
     } catch (error) {
         return unknownError(res, "unknown error")
     }
