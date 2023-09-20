@@ -1,4 +1,4 @@
-const { sellerFormatter } = require('../formatter/auth.format');
+const { sellerFormatter, sellerEditFormatter } = require('../formatter/auth.format');
 const authModel = require('../models/auth.model');
 const sellerModel = require('../models/seller.model');
 
@@ -42,19 +42,48 @@ exports.getAllSeller = async () => {
         }
         return { status: true, message: "Seller list", data: sellerData }
     } catch (error) {
-        return { status: false, message: "something went wrong", data: error }
+        return { status: false, message: error.message, data: error }
+    }
+}
+
+exports.getPaginatedSeller = async (page, limit) => {
+    try {
+        console.log(page, limit);
+        page = page ?? 1
+        limit = limit ?? 10
+        const options = {
+            page: page,
+            limit: limit,
+            sort: { createdAt: -1 },
+            select: '-_id -__v'
+        };
+        const sellerData = await sellerModel.paginate({ isActive: true }, options);
+        return { status: true, message: "Seller list", data: sellerData }
+    } catch (error) {
+        return { status: false, message: error.message, data: error }
     }
 }
 exports.updateSellerInfo = async (sellerId, updateData) => {
     try {
         // const { } = updateData
-        const sellerData = await sellerModel.find().select('-_id -__v');
-        if (!sellerData[0]) {
+        const sellerData = await sellerModel.findOne({ sellerId }).select('-_id -__v');
+        if (!sellerData) {
             return { status: false, message: "no Seller found", data: [] }
         }
-        return { status: true, message: "Seller list", data: sellerData }
+        const sellerFormat = sellerEditFormatter(updateData);
+        await sellerModel.findOneAndUpdate({ sellerId }, sellerFormat)
+        return { status: true, message: "Seller Updated", }
     } catch (error) {
-        return { status: false, message: "something went wrong", data: error }
+        return { status: false, message: error.message, data: error }
+    }
+}
+
+exports.addContractToSeller = async (sellerId, contract) => {
+    try {
+        await sellerModel.findOneAndUpdate({ sellerId }, { contract })
+        return { status: true, message: "Contract updated" }
+    } catch (error) {
+        return { status: false, message: error.message, data: error }
     }
 }
 exports.getAllAgentSeller = async (agentId) => {
@@ -65,7 +94,7 @@ exports.getAllAgentSeller = async (agentId) => {
         }
         return { status: true, message: "Seller list", data: sellerData }
     } catch (error) {
-        return { status: false, message: "something went wrong", data: error }
+        return { status: false, message: error.message, data: error }
     }
 }
 
@@ -77,7 +106,7 @@ exports.sellerById = async (userId) => {
         }
         return { status: true, message: "Seller info", data: sellerData }
     } catch (error) {
-        return { status: false, message: "something went wrong", data: error }
+        return { status: false, message: error.message, data: error }
     }
 }
 
@@ -97,7 +126,7 @@ exports.addYeloId = async (sellerId, yeloId) => {
         return { status: true, message: "yelo id Added" }
     } catch (error) {
         console.log(error);
-        return { status: false, message: "something went wrong", data: error }
+        return { status: false, message: error.message, data: error }
     }
 }
 
@@ -109,7 +138,7 @@ exports.sellerBySellerId = async (sellerId) => {
         }
         return { status: true, message: "Seller info", data: sellerData }
     } catch (error) {
-        return { status: false, message: "something went wrong", data: error }
+        return { status: false, message: error.message, data: error }
     }
 }
 
@@ -117,13 +146,14 @@ exports.changeVerifyStatus = async (sellerId, status) => {
     try {
         let sellerData
         if (status) {
-            sellerData = await sellerModel.findOneAndUpdate({ sellerId }, { verificationStatus: "approved", isVerfied: true });
+            sellerData = await sellerModel.findOneAndUpdate({ sellerId }, { verificationStatus: "approved", isVerified: true });
+            console.log(sellerData);
         } else {
-            sellerData = await sellerModel.findOneAndUpdate({ sellerId }, { verificationStatus: "rejected" });
+            sellerData = await sellerModel.findOneAndUpdate({ sellerId }, { verificationStatus: "rejected", isVerified: false });
         }
         return sellerData ? { status: true, message: "status changed", data: {} } : { status: false, message: "status not changed", data: {} }
     } catch (error) {
-        return { status: false, message: "something went wrong", data: error }
+        return { status: false, message: error.message, data: error }
     }
 }
 
@@ -139,7 +169,7 @@ exports.changeNotificationAlert = async (sellerId, status) => {
         await sellerModel.findOneAndUpdate({ sellerId }, { notificationAlert: status })
         return { status: true, message: "status changed" }
     } catch (error) {
-        return { status: false, message: "something went wrong", data: error }
+        return { status: false, message: error.message, data: error }
     }
 }
 

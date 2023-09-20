@@ -2,7 +2,7 @@ const axios = require("axios").default;
 
 async function axiosResponse(response) {
   if (response.status == 200) {
-    return { status: response.data.status, message: response.data.message, data: response.data.items };
+    return !response.data.items ? { status: response.status, message: response.message, data: response.data } : { status: response.data.status, message: response.data.message, data: response.data.items };
   } else {
     return { status: false, message: response.message, data: {} };
   }

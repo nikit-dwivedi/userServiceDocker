@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate-v2');
 const Schema = mongoose.Schema;
 
 const sellerSchema = new Schema({
@@ -92,11 +93,15 @@ const sellerSchema = new Schema({
         type: Number,
         default: 0
     },
+    contract: {
+        type: String,
+        default: ""
+    },
     outletList: {
         type: Array,
         default: []
     },
 })
-
+sellerSchema.plugin(mongoosePaginate)
 const sellerModel = mongoose.model('seller', sellerSchema);
 module.exports = sellerModel;

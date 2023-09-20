@@ -73,6 +73,29 @@ module.exports = {
             }
         }
     },
+    sellerEditFormatter: (data) => {
+        return {
+            "basicDetails.sellerName": data?.basicDetails?.sellerName,
+            "basicDetails.tradeName": data?.basicDetails?.tradeName,
+            "basicDetails.sellerType": data?.basicDetails?.sellerType,
+            "basicDetails.isGst": data?.basicDetails?.isGst,
+            "basicDetails.gstNo": data?.basicDetails?.gstNo,
+            "basicDetails.panNumber": data?.basicDetails?.panNumber,
+            "basicDetails.phone": data?.basicDetails?.phone,
+
+            "licenseDetails.nameOnlicence": data?.licenseDetails?.nameOnlicence,
+            "licenseDetails.licenceNumber": data?.licenseDetails?.licenceNumber,
+            "licenseDetails.licenceType": data?.licenseDetails?.licenceType,
+            "licenseDetails.licenceImage": data?.licenseDetails?.licenceImage,
+            "licenseDetails.issuedOn": data?.licenseDetails?.issuedOn,
+            "licenseDetails.tenure": data?.licenseDetails?.tenure,
+
+            "authorizedPersonDetails.name": data?.authorizedPersonDetails?.name,
+            "authorizedPersonDetails.pan": data?.authorizedPersonDetails?.pan,
+            "authorizedPersonDetails.phone": data?.authorizedPersonDetails?.phone,
+            "authorizedPersonDetails.email": data?.authorizedPersonDetails?.email,
+        }
+    },
     storyFormatter: (userData, url) => {
         const { userId, username } = userData
         let d = new Date

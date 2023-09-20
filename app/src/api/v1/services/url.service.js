@@ -4,9 +4,9 @@ const adminBaseUrlProd = 'https://admin.fablocdn.com'
 const deliveryBaseProd = 'https://delivery.fablocdn.com'
 
 exports.agentInfoUrl = (agentId) => {
-    return `${adminBaseUrlProd}/auth/${agentId}`
+    return `${adminBaseUrlProd}/v1/auth/${agentId}`
 }
 
 exports.createRoamTrackerUrl = () => {
-    return `${deliveryBaseProd}/partner/create`
+    return `${deliveryBaseProd}/v1/partner/create`
 }
