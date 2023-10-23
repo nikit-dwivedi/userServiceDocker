@@ -40,7 +40,8 @@ module.exports = {
         return {
             name: userData.name,
             email: userData.email,
-            image: userData.image
+            image: userData.image,
+            isCODEnable: userData.isCODEnable
         }
     },
     sellerFormatter: (userId, data) => {

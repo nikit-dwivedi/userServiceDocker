@@ -117,12 +117,10 @@ exports.editUserDetails = async (customerId, customerData) => {
         if (customerId == "") {
             customerId = null
         }
-        console.log(customerData);
-
         const formattedData = customerEditFormatter(customerData)
         console.log(formattedData);
         await customerModel.findOneAndUpdate({ customerId }, formattedData)
-        return customerId ? responseFormater(true, "profile updated") : responseFormater(false, "user not boarded")
+        return customerId ? responseFormater(true, "customer profile updated") : responseFormater(false, "user not boarded")
     } catch (error) {
         return responseFormater(false, error.message)
     }

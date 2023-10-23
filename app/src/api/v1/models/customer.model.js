@@ -29,7 +29,8 @@ const addressSchema = new Schema({
     location: {
         type: { type: String },
         coordinates: [],
-    }
+    },
+
 })
 
 const customerSchema = new Schema({
@@ -45,8 +46,8 @@ const customerSchema = new Schema({
     name: {
         type: String,
     },
-    email:{
-        type:String,
+    email: {
+        type: String,
     },
     phone: {
         type: String,
@@ -58,6 +59,10 @@ const customerSchema = new Schema({
         type: [addressSchema],
         default: []
     },
+    isCODEnable: {
+        type: Boolean,
+        default: true
+    }
 }, { timestamps: true })
 addressSchema.index({ location: "2dsphere" });
 const customerModel = mongoose.model('customer', customerSchema);
