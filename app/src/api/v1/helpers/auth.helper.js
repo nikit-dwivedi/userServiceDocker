@@ -100,7 +100,7 @@ exports.genrateOtpPhone = async (phone, userType, oldReqId) => {
         updatedData = await authModel.findOne({ phone })
     }
     if (updatedData.noOfOtp >= 10 && updatedData.date == date.getDate()) {
-        return responseFormater(false, "otp limit reached. try again tomorrow", {})
+        return responseFormater(false, "otp limit reached. try again tomorrow", { attempt: updatedData.noOfOtp })
     }
     if (userType) {
         updatedData.userType = userType
@@ -120,13 +120,13 @@ exports.genrateOtpPhone = async (phone, userType, oldReqId) => {
     userType = updatedData.userType
     await sendSms(updatedData.phone, otp)
     if (userType === 'seller') {
-        return responseFormater(true, "otp sent to phone", { reqId: reqId, isOnboarded: updatedData.isSellerOnboarded })
+        return responseFormater(true, "otp sent to phone", { reqId: reqId, isOnboarded: updatedData.isSellerOnboarded, attempt: updatedData.noOfOtp  })
     }
     else if (userType === 'partner') {
-        return responseFormater(true, "otp sent to phone", { reqId: reqId, isOnboarded: updatedData.isPartnerOnboarded })
+        return responseFormater(true, "otp sent to phone", { reqId: reqId, isOnboarded: updatedData.isPartnerOnboarded , attempt: updatedData.noOfOtp })
     }
     else {
-        return responseFormater(true, "otp sent to phone", { reqId: reqId, isOnboarded: updatedData.isClientOnboarded })
+        return responseFormater(true, "otp sent to phone", { reqId: reqId, isOnboarded: updatedData.isClientOnboarded, attempt: updatedData.noOfOtp  })
     }
 }
 exports.verifyOtp = async (reqId, otp) => {
